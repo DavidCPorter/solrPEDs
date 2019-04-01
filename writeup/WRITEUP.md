@@ -1,12 +1,12 @@
 # CS594-DCN: Final Project Writeup
 
 ## Students
-- \<List the names and emails of students here\>
+- David Porter <dporte7@uic.edu>
+- Claudio Montanari <cmonta9@uic.edu>
+- Komal Shinde <kshind2@uic.edu>
 
 ## Project Description
-\<Describe your project here.\>
-- This includes discussing any interesting design choices made as part
-  of the code you created.
+- (Project proposal .pdf file)[Project_Proposal.pdf]
 
 ## Experiment Description
 \<Describe your experiment here.\>
