@@ -6,7 +6,7 @@
 - Komal Shinde <kshind2@uic.edu>
 
 ## Project Description
-- (Project proposal .pdf file)[Project_Proposal.pdf]
+- [Project proposal .pdf file](Project_Proposal.pdf)
 
 ## Experiment Description
 \<Describe your experiment here.\>
