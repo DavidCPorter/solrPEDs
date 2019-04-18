@@ -1,0 +1,3 @@
+#!/bin/bash
+#step 4 (final step) for running solrcloud
+pssh -h cloud -P -t 99999 "./lucene-solr/solr/bin/solr start -c"

@@ -1,0 +1,7 @@
+#!/bin/bash
+#add config for solrCloud
+hosts=('10.10.1.1' '10.10.1.2' '10.10.1.3')
+pssh -h cloud -P -t 10000 rm -f lucene-solr/solr/bin/local_solr.in.sh.txt
+pscp -h cloud ./templates/local_solr.in.sh.txt /users/dporte7/lucene-solr/solr/bin/
+pssh -h cloud -P -t 10000 "cat lucene-solr/solr/bin/local_solr.in.sh.txt > lucene-solr/solr/bin/solr.in.sh"
+echo "done"

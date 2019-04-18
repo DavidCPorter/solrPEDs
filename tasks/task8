@@ -1,0 +1,3 @@
+#!/bin/bash
+#step 3 for running solrcloud
+pssh -h cloud -P -t 99999 "cd lucene-solr/solr;ant server"

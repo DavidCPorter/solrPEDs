@@ -1,0 +1,5 @@
+#!/bin/bash
+#step 2 for running solrcloud
+pssh -h cloud -P -t 99999 "cd lucene-solr;ant ivy-bootstrap"
+wait $!
+pssh -h cloud -P -t 99999 "cd lucene-solr;ant compile"

@@ -1,0 +1,9 @@
+
+[nodes]
+128.110.153.161
+128.110.153.154
+128.110.153.183
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=dporte7

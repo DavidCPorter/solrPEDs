@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#add folder structure for zookeeper runtime data
+pssh -h cloud -P sudo mkdir -p /var/solr/logs
+pssh -h cloud -P sudo mkdir /var/lib/zookeeper
+pssh -h cloud -P sudo chmod -R 777 /var/lib/zookeeper
+pssh -h cloud -P sudo chmod -R 777 /var/solr/*

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#start zookeeper
+pssh -h cloud -P -t 10000 ./lucene-solr/zookeeper-3.4.13/bin/zkServer.sh start

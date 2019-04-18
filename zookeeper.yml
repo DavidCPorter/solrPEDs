@@ -1,0 +1,27 @@
+---
+- hosts: nodes
+  remote_user: dporte7
+
+  tasks:
+  - name: ensure jdk8 is installed
+    apt:
+      name: openjdk-8-jdk
+    become: yes
+    become_user: root
+
+  - name: update packages
+    apt:
+      update_cache: yes
+    become: yes
+    become_user: root
+
+  - name: get solrcloud
+    git:
+      repo: https://github.com/DavidCPorter/lucene-solr.git
+      dest: /users/dporte7/lucene-solr
+      version: branch_7_7
+
+  # - name: download zookeeper
+  #   get_url:
+  #     url: http://apache.claz.org/zookeeper/stable/zookeeper-3.4.14.tar.gz
+  #     dest: /users/dporte7/lucene-solr

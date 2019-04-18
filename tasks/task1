@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#add SOLR_HOST to env 
+hosts=('10.10.1.1' '10.10.1.2' '10.10.1.3')
+for i in 0 1 2
+do
+	echo ${hosts[$i]}
+	pssh -h node$i "echo 'export SOLR_HOST=${hosts[$i]}'>>.profile"
+done
