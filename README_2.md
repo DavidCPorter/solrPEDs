@@ -1,12 +1,13 @@
 ## Instructions
 - add below config to local ~/.ssh/config file:
+```
     Host node0
         ForwardAgent yes
     Host node1
         ForwardAgent yes
     Host node2
         ForwardAgent yes
-
+```
 - add global IPs to /hosts under [nodes], and also to the /cloud hostfile
 - replace dporte7 w/ your user name in: /hosts /node* /zookeeper.yml /cloud
 - add global IP to /node* files
