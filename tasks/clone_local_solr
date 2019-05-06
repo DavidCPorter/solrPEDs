@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: bash tasks/task11 <new_lucene-solr_folder_name>"
+    echo "this will clone the lucene-solr branch from the task10 to your parent directory for this repo"
+    echo "the gitignore file will exclude solr.xml file "
+else
+git clone git@github.com:DavidCPorter/lucene-solr.git ../$1
+cd ../$1
+git checkout $USER
+echo "EXITED"
+fi

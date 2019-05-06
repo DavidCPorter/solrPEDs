@@ -13,3 +13,5 @@
 - add your subnet IPs for the nodes in the var hosts in /tasks/task1 (if using cloudlab, file will likely be unchanged)
 - run `ansible-playbook -i ./hosts zookeeper.yml`
 - run task1 - task9 from ../tasks (/tasks parent directory) e.g. $ bash tasks/task1
+- task 'commit_changes' will take any modifications to lucene-solr repo and them to your own dev branch "$USER". You need to pass in "commit message" to the script.
+- task 'clone_local_solr' will clone the $USER branch of lucene-solr to your parent directory. From here you can make changes to the source code and push. then run 'push_repo' to push those changes.
