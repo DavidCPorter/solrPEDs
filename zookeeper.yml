@@ -17,9 +17,10 @@
 
   - name: get solrcloud
     git:
-      repo: https://github.com/DavidCPorter/lucene-solr.git
+      repo: git@github.com:DavidCPorter/lucene-solr.git
       dest: /users/dporte7/lucene-solr
-      version: branch_7_7
+      version: dporter
+      accept_hostkey: yes
 
   # - name: download zookeeper
   #   get_url:

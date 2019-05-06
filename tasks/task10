@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: bash tasks/task10 <'commit message'>"
+else
+echo "$1"
+pssh -h node0 -P -t 99999 " cd lucene-solr;git checkout -b $USER;git add .;git commit -m'$1';git push origin $USER"
+fi
