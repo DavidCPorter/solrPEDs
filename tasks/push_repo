@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# if [ "$#" -ne 1 ]; then
-#     echo "Usage: bash tasks/push_repo"
-#     echo "pulls most recent copy of lucene-solr branch=\$USER to each node"
-#
-# else
-pssh -h cloud -P -t 10000 "git pull origin '$USER'"

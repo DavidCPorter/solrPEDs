@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: bash tasks/task10-push... <'commit message'>"
+    echo "this command creates a new branch $USER and pushes the config changes to repo"
+    echo "next-> run clone_local_solr next to get a local copy of lucene-solr -b=$USER"
+
+else
+echo "$1"
+pssh -h node0 -P -t 99999 "git checkout -b $USER"
+pssh -h node0 -P -t 99999 "cd lucene-solr;git checkout $USER;git add .;git commit -m'$1';git push origin $USER"
+fi
