@@ -30,8 +30,8 @@ echo 'Installing performance monitoring tools'
 blast "sudo apt-get install --assume-yes htop dstat sysstat ant"
 
 echo 'Downloading solr version 7.7.0 source code'
-blast "curl -O \"http://archive.apache.org/dist/lucene/solr/7.7.0/solr-7.7.0-src.tgz\""
-blast "mkdir ./solr; tar -zxvf solr-7.7.0-src.tgz -C ./solr --strip-components=1"
+blast "curl -O \"http://archive.apache.org/dist/lucene/solr/7.7.0/solr-7.7.0.tgz\""
+blast "mkdir ./solr; tar -zxvf solr-7.7.0.tgz -C ./solr --strip-components=1"
 
 echo 'Downloading zookeeper version 3.4.13'
 blast "curl -O \"http://archive.apache.org/dist/zookeeper/zookeeper-3.4.13/zookeeper-3.4.13.tar.gz\""
