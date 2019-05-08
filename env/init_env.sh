@@ -56,10 +56,12 @@ echo 'Starting zookeeper, check the log file to see if there are errors'
 blast "./zookeeper/bin/zkServer.sh start $REMOTE_PATH/zookeeper/conf/zoo.cfg"
 
 echo 'Building solr'
-blast "cd ./solr/; ant ivy-bootstrap; ant compile" 
-blast "cd ./solr/solr; ant server"
-blast "cd ./solr/solr/bin; ./solr start -c -p 8983 -z 10.10.1.1:2181,10.10.1.2:2181,10.10.1.3:2181 -force"
+#blast "cd ./solr/; ant ivy-bootstrap; ant compile" 
+#blast "cd ./solr/solr; ant server"
+blast "cd ./solr/bin; ./solr start -c -p 8983 -z 10.10.1.1:2181,10.10.1.2:2181,10.10.1.3:2181 -force"
 
-echo 'Installation finished, check on port 8983 of node0 to see if solr is running'
+IP=$(ssh $USER@node0 "ifconfig | awk '/inet/ {print \$2}' | head -n 1")
+
+echo "Installation finished, check on ${IP}:8983 if solr is running"
 
 exit
