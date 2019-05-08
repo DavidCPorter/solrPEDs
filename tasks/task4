@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# config task for zookeeper 
+# config task for zookeeper
 
 hosts=('10.10.1.1' '10.10.1.2' '10.10.1.3')
 pssh -h cloud -P -t 10000 rm -f /users/dporte7/lucene-solr/zookeeper-3.4.13/conf/zoo.cfg
@@ -8,6 +8,6 @@ pscp -h cloud ./templates/zoo.cfg /users/dporte7/lucene-solr/zookeeper-3.4.13/co
 
 for i in 0 1 2
 do
-	pssh -P -h node$i "touch /var/lib/zookeeper/myid;echo '$i'>/var/lib/zookeeper/myid;cat /var/lib/zookeeper/myid"
+	pssh -P -h node$i "touch /var/lib/zookeeper/myid;echo '$((i+1))'>/var/lib/zookeeper/myid;cat /var/lib/zookeeper/myid"
 done
 echo "done"

@@ -4,4 +4,4 @@
 pssh -h cloud -P sudo mkdir -p /var/solr/logs
 pssh -h cloud -P sudo mkdir /var/lib/zookeeper
 pssh -h cloud -P sudo chmod -R 777 /var/lib/zookeeper
-pssh -h cloud -P sudo chmod -R 777 /var/solr/*
+pssh -h cloud -P sudo chmod -R 777 /var

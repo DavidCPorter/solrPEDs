@@ -5,9 +5,9 @@
 #     echo "pulls most recent copy of lucene-solr branch=\$USER to each node"
 #
 # else
-pssh -h cloud -P -t 10000 "cd lucene-solr;rm -f solr/bin/solr.in.sh zookeeper-3.4.13/conf/zoo.cfg solr/bin/local_solr.in.sh.txt"
+# pssh -h cloud -P -t 10000 "cd lucene-solr;rm -f solr/bin/solr.in.sh zookeeper-3.4.13/conf/zoo.cfg solr/bin/local_solr.in.sh.txt;git add ."
 pssh -h cloud -P -t 10000 "cd lucene-solr;git checkout $USER;git pull origin $USER"
 for i in 0 1 2
 do
-	pssh -P -h node$i "touch /var/lib/zookeeper/myid;echo '$i'>/var/lib/zookeeper/myid;cat /var/lib/zookeeper/myid"
+	pssh -P -h node$i "touch /var/lib/zookeeper/myid;echo '$((i+1))'>/var/lib/zookeeper/myid;cat /var/lib/zookeeper/myid"
 done
