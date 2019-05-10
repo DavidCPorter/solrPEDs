@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pssh -h cloud -P -t 10000 "bash lucene-solr/zookeeper-3.4.13/bin/zkServer.sh restart"
