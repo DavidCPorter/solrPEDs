@@ -1,0 +1,28 @@
+[MainThread]: [2019-05-10 17:31:42,780] - Waiting 3 s for 2 threads to initialize
+[000]: [2019-05-10 17:31:42,963] - Waiting for start event
+[001]: [2019-05-10 17:31:42,970] - Waiting for start event
+[MainThread]: [2019-05-10 17:31:45,781] - Signaling threads to start test
+[MainThread]: [2019-05-10 17:31:45,781] - Waiting 5 s for test to complete
+[000]: [2019-05-10 17:31:45,781] - Event True: Starting
+[001]: [2019-05-10 17:31:45,782] - Event True: Starting
+[MainThread]: [2019-05-10 17:31:50,785] - Test completed
+[001]: [2019-05-10 17:31:50,917] - Exiting
+[000]: [2019-05-10 17:31:50,930] - Exiting
+[MainThread]: [2019-05-10 17:31:50,938] - Wrote /Users/dporter/projects/ansible_solr/dp_scripts/http_benchmark.csv
+[MainThread]: [2019-05-10 17:32:20,635] - Waiting 3 s for 4 threads to initialize
+[000]: [2019-05-10 17:32:20,929] - Waiting for start event
+[002]: [2019-05-10 17:32:20,954] - Waiting for start event
+[001]: [2019-05-10 17:32:20,976] - Waiting for start event
+[003]: [2019-05-10 17:32:20,993] - Waiting for start event
+[MainThread]: [2019-05-10 17:32:23,639] - Signaling threads to start test
+[MainThread]: [2019-05-10 17:32:23,639] - Waiting 12 s for test to complete
+[000]: [2019-05-10 17:32:23,639] - Event True: Starting
+[002]: [2019-05-10 17:32:23,640] - Event True: Starting
+[001]: [2019-05-10 17:32:23,640] - Event True: Starting
+[003]: [2019-05-10 17:32:23,640] - Event True: Starting
+[MainThread]: [2019-05-10 17:32:35,643] - Test completed
+[002]: [2019-05-10 17:32:35,755] - Exiting
+[000]: [2019-05-10 17:32:35,815] - Exiting
+[001]: [2019-05-10 17:32:35,888] - Exiting
+[003]: [2019-05-10 17:32:35,996] - Exiting
+[MainThread]: [2019-05-10 17:32:36,003] - Wrote /Users/dporter/projects/ansible_solr/dp_scripts/http_benchmark.csv
