@@ -6,7 +6,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 SCHEMA='reviews'
-DATASET_PATH='../reviews_Electronics_5.json'
+DATASET_PATH='~/reviews_Electronics_5.json'
 SCHEMA_PATH='../amazon_review_schema.json'
 USER=$1
 
@@ -17,11 +17,11 @@ echo 'Uncompressing the amazon dataset'
 ssh $USER@node0 "gunzip reviews_Electronics_5.json.gz" >> ./node0.out
 
 echo 'Stopping and restarting the solrCloud instance'
-ssh $USER@node0 "cd ./solr; ./bin/solr stop -all" >> node0.out
-ssh $USER@node0 "cd ./solr; ./bin/solr start -c -p 8983 -z 10.10.1.1:2181,10.10.1.2:2181,10.10.1.3:2181 -force" >> node0.out
+ssh $USER@node0 "cd ./lucene-solr/solr; ./bin/solr stop -all" >> node0.out
+ssh $USER@node0 "cd ./lucene-solr/solr; ./bin/solr start -c -p 8983 -z 10.10.1.1:2181,10.10.1.2:2181,10.10.1.3:2181 -force" >> node0.out
 
 echo 'Creating a new collection for reviews: replication factor = 3, sharding = 3'
-ssh $USER@node0 "cd ./solr; ./bin/solr create_collection -c $SCHEMA -s 3 -rf 3 -force" >> node0.out
+ssh $USER@node0 "cd ./lucene-solr/solr; ./bin/solr create_collection -c $SCHEMA -s 3 -rf 3 -force" >> node0.out
 
 IP=$(ssh $USER@node0 "ifconfig | awk '/inet/ {print \$2}' | head -n 1")
 
@@ -61,10 +61,10 @@ curl http://$IP:8983/solr/$SCHEMA/schema -X POST -H 'Content-type:application/js
         "type":"text_general",
         "multiValued":true,
         "stored":true
-    } 
+    }
 }' >> node0.out
 
-ssh $USER@node0 "cd ./solr; ./bin/post -c $SCHEMA $DATASET_PATH" >> node0.out
+ssh $USER@node0 "cd ./lucene-solr/solr; ./bin/post -c $SCHEMA $DATASET_PATH" >> node0.out
 
 curl http://$IP:8983/solr/$SCHEMA/config/params -H 'Content-type:application/json'  -d '{
 "update" : {
