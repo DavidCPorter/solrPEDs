@@ -266,7 +266,7 @@ def duration_based_test( test_param, thread_stats, start_flag, stop_flag, reques
     while not stop_flag.isSet():
         dt = time.time() - start
         # Wait before making next request
-        time.sleep( sleep_times[i] )
+        #time.sleep( sleep_times[i] )
         req_start = time.time()
         try:
             rsp = http_pool.request( "GET", urls[i] )
