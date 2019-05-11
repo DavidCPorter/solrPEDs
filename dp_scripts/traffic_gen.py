@@ -9,7 +9,6 @@ import urllib3
 import argparse
 import threading
 import numpy as np
-import queue
 
 class WebStats( object ):
     def __init__( self, tot_bytes=0, tot_requests=0, tot_errors=0,
@@ -119,7 +118,7 @@ def convert_units( web_stats ):
 
     return web_stats
 
-def write_csv( csv_file, web_stats, main_args, return_list=None ):
+def write_csv( csv_file, web_stats, main_args ):
     """ Generate CSV file """
     hdr_fmt = "%s - %s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n"
     header = hdr_fmt %  ( "Threads",
@@ -134,7 +133,9 @@ def write_csv( csv_file, web_stats, main_args, return_list=None ):
                           "Total Duration (s)",
                           "Bandwidth (Mbps)",
     )
-    request_enum_header = "thread_num,url_request,req_start,req_finish,fct\n"
+    mode = "w"
+    if os.path.isfile( csv_file ):
+        mode = "a"
     body_fmt = "%s - %s,%.2f,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n"
     next_line = body_fmt % ( main_args.threads,
                              main_args.conns,
@@ -149,13 +150,10 @@ def write_csv( csv_file, web_stats, main_args, return_list=None ):
                              web_stats.bw,
                            )
 
-
-    with open( csv_file, 'w' ) as output_file:
-        output_file.write( header )
+    with open( csv_file, mode ) as output_file:
+        if mode == "w":
+            output_file.write( header )
         output_file.write( next_line )
-        output_file.write( request_enum_header)
-        for i in range(return_list.qsize()):
-            output_file.write(str(return_list.get())[1:-1]+'\n')
 
     return
 
@@ -164,8 +162,6 @@ def size_based_test( test_param, thread_stats, start_flag, stop_flag ):
     terms = ["good","bad","5","stars","best","horrible","incredible","terrific","garbage"]
     indexed_fields = ["reviewerName","reviewText","overall","summary"]
     name = threading.currentThread().getName()
-
-
     j = int( name )
     prefix_url = "%s/" % (test_param.base_url)
     np.random.seed( j )
@@ -201,14 +197,10 @@ def size_based_test( test_param, thread_stats, start_flag, stop_flag ):
     i = 0
     while not stop_flag.isSet():
         # Wait before making next request
-        # time.sleep( sleep_times[i] )
+        time.sleep( sleep_times[i] )
         req_start = time.time()
         try:
             rsp = http_pool.request( "GET", urls[i] )
-            req_finish = time.time()
-            fct = req_finish - req_start
-            thread_stats.avg_lat[j] += fct
-            request_list.put((name,urls[i],req_start,req_finish,fct))
             thread_stats.avg_lat[j] += time.time() - req_start
             thread_stats.responses[j] += 1
             thread_stats.byte_count[j] += len( rsp.data )
@@ -221,12 +213,12 @@ def size_based_test( test_param, thread_stats, start_flag, stop_flag ):
         thread_stats.avg_lat[j] = thread_stats.avg_lat[j] / float( thread_stats.requests[j] )
     logging.debug( "Exiting" )
 
-    return request_list
+    return
 
-def duration_based_test( test_param, thread_stats, start_flag, stop_flag, request_list):
+def duration_based_test( test_param, thread_stats, start_flag, stop_flag ):
     """ Duration-based test to be carried out by each thread """
-    terms = ["good","bad","5","stars","best","horrible","incredible","terrific","garbage"]
-    indexed_fields = ["reviewerName","reviewText","overall","summary"]
+    terms = ["good","bad","5","stars","best","horrible","incredible","terrific","garbage","useful","useless","nice","awful","amazing","friend","new","stuck","blocked"]
+    indexed_fields = ["reviewText","summary"]
 
     name = threading.currentThread().getName()
     j = int( name )
@@ -246,7 +238,8 @@ def duration_based_test( test_param, thread_stats, start_flag, stop_flag, reques
         for i in range( test_param.max_iters ):
             term = terms[i%len(terms)]
             field = indexed_fields[i%len(indexed_fields)]
-            q = 'solr/reviews/select?q='+field+'%3A'+term+'&rows=10'
+            #q = 'solr/reviews/select?q='+field+'%3A'+term+'&rows=10'
+            q = 'solr/reviews/select?q='+field+'%3A'+term
             urls.append( "%s%s" % (prefix_url, q))
 
     else:
@@ -271,10 +264,7 @@ def duration_based_test( test_param, thread_stats, start_flag, stop_flag, reques
         try:
             rsp = http_pool.request( "GET", urls[i] )
             if dt > test_param.ramp:
-                req_finish = time.time()
-                fct = req_finish - req_start
-                thread_stats.avg_lat[j] += fct
-                request_list.put((name,urls[i],req_start,req_finish,fct))
+                thread_stats.avg_lat[j] += time.time() - req_start
                 thread_stats.responses[j] += 1
                 thread_stats.byte_count[j] += len( rsp.data )
         except Exception as e:
@@ -302,7 +292,7 @@ def main( ):
                          help="Web server port number" )
     parser.add_argument( "--duration", dest="duration", type=float, default=20.0,
                          help="Duration of test in seconds" )
-    parser.add_argument( "--ramp", dest="ramp", type=float, default=2.0,
+    parser.add_argument( "--ramp", dest="ramp", type=float, default=10.0,
                          help="Ramp time for duration-based testing" )
 
     parser.add_argument( "--size", dest="transfer_size", type=int, default=1024,
@@ -345,8 +335,6 @@ def main( ):
     gauss_mean = 1.0 / 16384.0
     gauss_std = 0.5
     poisson_lam = gauss_mean
-    #returns a list passed to the threads to append (name,urls[i],req_start,req_finish,fct) for each request
-    return_list = queue.Queue()
 
     thread_stats = ThreadStats()
     for i in range( main_args.threads ):
@@ -373,7 +361,7 @@ def main( ):
                                 max_rand_obj=main_args.max_rand_obj, req_dist=main_args.req_dist,
                                 gauss_mean=gauss_mean, gauss_std=gauss_std, poisson_lam=poisson_lam )
 
-    thread_args = ( test_param, thread_stats, start_flag, stop_flag, return_list)
+    thread_args = ( test_param, thread_stats, start_flag, stop_flag )
 
     # Spawn threads
     for i in range( main_args.threads ):
@@ -421,9 +409,8 @@ def main( ):
     web_stats = convert_units( web_stats )
 
     # Save statistics to CSV file
-    write_csv( csv_file, web_stats, main_args, return_list)
+    write_csv( csv_file, web_stats, main_args )
     logging.debug( "Wrote %s" % (csv_file) )
-
 
     return 0
 

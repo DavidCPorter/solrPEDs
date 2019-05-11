@@ -2,15 +2,15 @@
 
 function start_experiment() {
 
-    if [ "$#" -ne 3 ]; then
-        echo "Usage: start_experiment <username> <python script> <parameters>"
+    if [ "$#" -ne 2 ]; then
+        echo "Usage: start_experiment <username> <python script>"
     	exit
     fi
 
 	USER=$1
 	PY_SCRIPT=$2
-	PARAMETERS=$(echo $3 | tr '\"' ' ')
-    echo "parameters: $PARAMETERS"
+	#PARAMETERS=$(echo $3 | tr '\"' ' ')
+    #echo "parameters: $PARAMETERS"
 
     echo 'Coping python script on remote machine'
     scp $PY_SCRIPT $USER@node3:~/
@@ -19,10 +19,10 @@ function start_experiment() {
     IP_1=$(ssh $USER@node1 "ifconfig | awk '/inet/ {print \$2}' | head -n 1")
     IP_2=$(ssh $USER@node2 "ifconfig | awk '/inet/ {print \$2}' | head -n 1")
 
-    PAR_0="--host $IP_0 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
-    PAR_1="--host $IP_1 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
-    PAR_2="--host $IP_2 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
-    PAR_N="--host $IP_2 --port 8983 --threads 80 --duration 25 --random --connections 10 --output-dir ./"
+    PAR_0="--host 10.10.1.1 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
+    PAR_1="--host 10.10.1.2 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
+    PAR_2="--host 10.10.1.3 --port 8983 --threads 80 --duration 20 --random --connections 10 --output-dir ./"
+    PAR_N="--host 10.10.1.3 --port 8983 --threads 80 --duration 25 --random --connections 10 --output-dir ./"
 
     for i in $(seq 6); do
     	nohup ssh $USER@node3 "python3 $(basename $PY_SCRIPT) $PAR_0 &>/dev/null &" 
@@ -37,15 +37,14 @@ function start_experiment() {
 
 function profile_experiment_dstat() {
 
-    if [ "$#" -ne 3 ]; then
-        echo "Usage: profile_experiment_dstat <username> <python script> <parameters>"
+    if [ "$#" -ne 2 ]; then
+        echo "Usage: profile_experiment_dstat <username> <python script>"
     	exit
     fi
 
 	USER=$1
 	PY_SCRIPT=$2
-	PARAMETERS=$3
-    echo "parameters: $PARAMETERS"
+	#PARAMETERS=$3
 
     PY_NAME=$(basename $PY_SCRIPT | cut -d '.' -f1)
 
@@ -58,7 +57,7 @@ function profile_experiment_dstat() {
     nohup ssh $USER@node3 "dstat --output node3_dstat_$PY_NAME.csv &>/dev/null &"
 
 	echo 'Starting the experiment'
-	start_experiment $USER $PY_SCRIPT "\"$PARAMETERS\""
+	start_experiment $USER $PY_SCRIPT 
 
     echo 'Stopping dstat'
     nohup parallel-ssh -i -H "$USER@node0 $USER@node1 $USER@node2 $USER@node3" "ps aux | grep -i 'dstat*' | awk -F' ' '{print \$2}' | xargs kill -9"
@@ -72,18 +71,18 @@ function profile_experiment_dstat() {
 }
 
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage: utils.sh <username> <python script> <parameters>"
+if [ "$#" -ne 2 ]; then
+    echo "Usage: utils.sh <username> <python script>"
 	exit
 fi
 
 USER=$1
 PY_SCRIPT=$2
-PARAMETERS=$3
+#PARAMETERS=$3
 
 echo "starting experiment"
 
-profile_experiment_dstat $USER $PY_SCRIPT "\"$PARAMETERS\""
+profile_experiment_dstat $USER $PY_SCRIPT 
 
 #start_experiment $USER $PY_SCRIPT "\"$PARAMETERS\""
 
