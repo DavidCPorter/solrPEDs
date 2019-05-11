@@ -13,21 +13,23 @@ USER=$1
 
 echo 'Checking ssh connection'
 
-parallel-ssh -i -H "$USER@node0 $USER@node1 $USER@node2" -t 0 -O StrictHostKeyChecking=no hostname
+parallel-ssh -i -H "$USER@node0 $USER@node1 $USER@node2 $USER@node3" -t 0 -O StrictHostKeyChecking=no hostname
 alias blast='parallel-ssh -i -H "$USER@node0 $USER@node1 $USER@node2" -t 0'
+alias blast_all='parallel-ssh -i -H "$USER@node0 $USER@node1 $USER@node2 $USER@node3" -t 0'
 
 REMOTE_PATH="$(ssh $USER@node0 pwd)"
 
 echo 'Updating the system'
-blast "sudo apt-get update --fix-missing"
+blast_all "sudo apt-get update --fix-missing"
 
 echo 'Installing Java 8'
-blast "sudo apt-get install --assume-yes openjdk-8-jdk"
+blast_all "sudo apt-get install --assume-yes openjdk-8-jdk"
 JAVA_PATH="$(ssh $USER@node0 "update-alternatives --display java | awk '/currently/ {print \$5}' | sed 's=bin/java=='" )"
 #blast "sudo sed -i 's~PATH=\"*~&$JAVA_PATH:~' /etc/environment"
 
 echo 'Installing performance monitoring tools'
-blast "sudo apt-get install --assume-yes htop dstat sysstat ant"
+blast_all "sudo apt-get install --assume-yes htop dstat sysstat ant python3-pip iperf3"
+blast_all "sudo pip3 install numpy"
 
 echo 'Downloading solr version 7.7.0 source code'
 blast "curl -O \"http://archive.apache.org/dist/lucene/solr/7.7.0/solr-7.7.0.tgz\""
