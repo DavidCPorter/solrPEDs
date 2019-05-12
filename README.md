@@ -1,7 +1,7 @@
 # CS594-DCN-Final-Proj
 
 ## Environment set up
-There are two way you can set up the cluster for the experiments:
+There are two ways you can set up the cluster for the experiments:
 
 - add below config to local ~/.ssh/config file:
 ```
@@ -21,6 +21,7 @@ There are two way you can set up the cluster for the experiments:
 - task 'commit_changes' will take any modifications to lucene-solr repo and them to your own dev branch "$USER". You need to pass in "commit message" to the script.
 - task 'clone_local_solr' will clone the $USER branch of lucene-solr to your parent directory. From here you can make changes to the source code and push. then run 'push_repo' to push those changes.
 
+
 Otherwise add ssh aliases as follows (substitute the proper hostname):
 ```
 Host node0
@@ -39,5 +40,11 @@ Host node3
 Then run the __init\_env.sh__ script in the __env__ folder.
 
 ## Experiments
-To execute the Amazon review test stress first execute the __amazon_reviews_claudio.sh__ script provinding your username on cloudLab and the path to solr (it should be something like: __/users/\<username\>/solr__. This will load the data on solr. 
-Then run __utils.sh__ from the project home directory. This will start generating the traffic on the fourth node of the cluster and monitor system utilization via __dstat__. Finally results of the experiment will be copied in the __profiling\_data__ folder. 
+To execute the Amazon review test stress first execute the __amazon_reviews_claudio.sh__ script provinding your username on cloudLab and the path to solr (it should be something like: __/users/\<username\>/solr__. 
+This will load the data on solr. 
+
+Then run __utils.sh__ from the project home directory. This will start generating the traffic on the fourth node of the cluster and monitor system utilization via __dstat__. Finally results of the experiment will be copied in the __profiling\_data__ folder.
+
+## Report 
+Here it's possible to read the report of the project: 
+[__Final Project Report__](cs494_cdcs_s19_final_proj_group4.pdf)
