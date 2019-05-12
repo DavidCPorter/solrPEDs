@@ -1,31 +1,43 @@
 # CS594-DCN-Final-Proj
-Starter code for final project submissions in CS594: DCN
 
-**NOTE: You can use the command `grip . <ip> &` where `<ip>` is the IP
-of your CloudLab server to view the README.md files from your web
-browser.**
+## Environment set up
+There are two way you can set up the cluster for the experiments:
 
-## Part 0: Setup the cluster
-Follow the steps in `env` (See the [README](env/README.md)).  If you
-need to perform any additional environment configuration, you should add
-scripts and documentation to this folder.
+- add below config to local ~/.ssh/config file:
+```
+    Host node0
+        ForwardAgent yes
+    Host node1
+        ForwardAgent yes
+    Host node2
+        ForwardAgent yes
+```
+- add global IPs to /hosts under [nodes], and also to the /cloud hostfile
+- replace dporte7 w/ your user name in: /hosts /node* /zookeeper.yml /cloud
+- add global IP to /node* files
+- add your subnet IPs for the nodes in the var hosts in /tasks/task1 (if using cloudlab, file will likely be unchanged)
+- run `ansible-playbook -i ./hosts zookeeper.yml`
+- run task1 - task9 from ../tasks (/tasks parent directory) e.g. $ bash tasks/task1
+- task 'commit_changes' will take any modifications to lucene-solr repo and them to your own dev branch "$USER". You need to pass in "commit message" to the script.
+- task 'clone_local_solr' will clone the $USER branch of lucene-solr to your parent directory. From here you can make changes to the source code and push. then run 'push_repo' to push those changes.
 
-## Part 1: Create code for an experiment
-You should put the *core code* you create as part of this project in
-`code`.  The [README](code/README.md) in the `code` directory should
-document the important files and directories of code and should describe
-the steps needed to build the code, if needed.
+Otherwise add ssh aliases as follows (substitute the proper hostname):
+```
+Host node0
+	HostName c220g2-011105.wisc.cloudlab.us
 
-## Part 2: Perform an experiment that benchmarks some aspect of your code
-Any scripts and code created to run the *experiment* for your project
-should be saved in the `exps` directory.  The [README](exps/README.md))
-in this directory should detail the important files and folders for
-running the experiments and provide step-by-step directions for running
-the experiment.
+Host node1
+	HostName c220g2-011111.wisc.cloudlab.us
 
-## Part 3: Create a project writeup
-Your writeup should be located in [writeup/WRITEUP.md](writeup/WRITEUP.md).
-In this writeup, you will describe the design of your code and
-experiments, and you will present and discuss the results of your
-experiments.  This writeup should include any figures (PNG images) you
-have created as part of your experiments.
+Host node2
+	HostName c220g2-011102.wisc.cloudlab.us
+
+Host node3
+	HostName c220g2-011107.wisc.cloudlab.us
+
+```
+Then run the __init\_env.sh__ script in the __env__ folder.
+
+## Experiments
+To execute the Amazon review test stress first execute the __amazon_reviews_claudio.sh__ script provinding your username on cloudLab and the path to solr (it should be something like: __/users/\<username\>/solr__. This will load the data on solr. 
+Then run __utils.sh__ from the project home directory. This will start generating the traffic on the fourth node of the cluster and monitor system utilization via __dstat__. Finally results of the experiment will be copied in the __profiling\_data__ folder. 
