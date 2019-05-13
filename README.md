@@ -1,5 +1,9 @@
 # CS594-DCN-Final-Proj
 
+## Report
+Here is the final report of the project:
+[__Final Project Report__](cs494_cdcs_s19_final_proj_group4.pdf)
+
 ## Environment set up
 There are two ways you can set up the cluster for the experiments:
 
@@ -40,11 +44,7 @@ Host node3
 Then run the __init\_env.sh__ script in the __env__ folder.
 
 ## Experiments
-To execute the Amazon review test stress first execute the __amazon_reviews_claudio.sh__ script provinding your username on cloudLab and the path to solr (it should be something like: __/users/\<username\>/solr__. 
-This will load the data on solr. 
+To execute the Amazon review test stress first execute the __amazon_reviews_claudio.sh__ script provinding your username on cloudLab and the path to solr (it should be something like: __/users/\<username\>/solr__.
+This will load the data on solr.
 
 Then run __utils.sh__ from the project home directory. This will start generating the traffic on the fourth node of the cluster and monitor system utilization via __dstat__. Finally results of the experiment will be copied in the __profiling\_data__ folder.
-
-## Report 
-Here it's possible to read the report of the project: 
-[__Final Project Report__](cs494_cdcs_s19_final_proj_group4.pdf)
